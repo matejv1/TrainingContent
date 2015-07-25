@@ -11,7 +11,10 @@
     // public signature of the service
     return {
       lookupCustomerPartials: lookupCustomerPartials,
-      lookupCustomer: lookupCustomer
+      lookupCustomer: lookupCustomer,
+      getRelatedDocs: getRelatedDocs,
+      getFiles: getFiles
+
     };
 
     /** *********************************************************** */
@@ -86,5 +89,53 @@
       return deferred.promise;
     }
 
+    function getRelatedDocs(mail) {
+      var deferred = $q.defer();
+      deferred.resolve(mail);
+      // fetch data
+      console.log(mail.from.emailAddress);
+
+      return deferred.promise;
+    }
+
+    function getFiles(filterEmail) {
+      var deferred = $q.defer();
+
+      // fetch data
+      var restQueryUrl = "https://agile9.sharepoint.com/_api/lists";
+
+      $http({
+        method: 'GET',
+        url: restQueryUrl,
+        headers: {
+            "accept": "application/json; odata=verbose",
+        }
+      }).success(function (response) {
+        var result = {};
+
+        // find the matching customer
+        result = $.map(data.d.query.PrimaryQueryResult.RelevantResults.Table.Rows.results, function (item) {
+                return getFields(item.Cells.results);
+            });
+
+        deferred.resolve(result);
+      }).error(function (error) {
+        deferred.reject(error);
+      });
+
+      return deferred.promise;
+    }
+
   }
 })();
+
+//helper function for rest-search result formating
+function getFields(results) {
+    r = {};
+    for (var i = 0; i < results.length; i++) {
+        if (results[i] != undefined && results[i].Key != undefined) {
+            r[results[i].Key] = results[i].Value;
+        }
+    }
+    return r;
+}

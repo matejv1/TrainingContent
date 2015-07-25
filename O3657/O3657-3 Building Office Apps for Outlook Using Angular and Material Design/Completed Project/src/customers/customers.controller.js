@@ -35,6 +35,11 @@
           .then(function () {
             return getCadidateCustomersFromService();
           });
+
+      getCurrentMailboxItem()
+          .then(function(){
+            return getRelatedFiles();
+          });
     }
 
     /**
@@ -69,6 +74,39 @@
           .catch(function (error) {
             console.log('>>> failed getCadidateCustomersFromService', error);
             deferred.reject(error);
+          });
+
+      return deferred.promise;
+    }
+
+    ////////////////////////////////////////////
+    function getCurrentMailboxItem(){
+      var deferred = $q.defer();
+
+      officeService.getCurrentMailboxItem()
+          .then(function(mailbox){
+            vm.currentMailboxItem = mailbox;
+            console.log("getCurrentMailboxItem()");
+            deferred.resolve();
+          })
+          .catch(function (error) {
+              deferred.reject(error);
+          });
+
+      return deferred.promise;
+    }
+
+    ////////////////////////////////////////////
+    function getRelatedFiles(){
+      var deferred = $q.defer();
+
+      customerService.getRelatedDocs(vm.currentMailboxItem)
+          .then(function(files){
+            console.log("getRelatedFiles()");
+            deferred.resolve();
+          })
+          .catch(function (error) {
+              deferred.reject(error);
           });
 
       return deferred.promise;

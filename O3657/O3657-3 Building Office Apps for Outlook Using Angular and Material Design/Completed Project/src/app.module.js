@@ -6,7 +6,8 @@
     'ngRoute',
     'ngAnimate',
     'ngSanitize',
-    'ngMaterial'
+    'ngMaterial',
+    'AdalAngular'
   ]);
 
   // configure the app

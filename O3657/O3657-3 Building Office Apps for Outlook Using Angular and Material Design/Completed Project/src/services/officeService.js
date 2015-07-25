@@ -12,7 +12,8 @@
   function officeService($q) {
     // public signature of the service.
     return {
-      getWordCandidatesFromEmail: getWordCandidatesFromEmail
+      getWordCandidatesFromEmail: getWordCandidatesFromEmail,
+      getCurrentMailboxItem: getCurrentMailboxItem
     };
 
     /** *********************************************************** */
@@ -36,6 +37,21 @@
       }
 
       return deferred.promise;
+    }
+
+
+    function getCurrentMailboxItem(){
+      var deferred = $q.defer();
+
+      try {
+        var currentEmail = Office.cast.item.toItemRead(Office.context.mailbox.item);
+        deferred.resolve(currentEmail);
+      } catch (error) {
+        deferred.reject(error);
+      }
+
+      return deferred.promise;
+
     }
   }
 
