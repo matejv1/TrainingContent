@@ -102,7 +102,7 @@
       var deferred = $q.defer();
 
       // fetch data
-      var restQueryUrl = "https://agile9.sharepoint.com/_api/lists";
+      var restQueryUrl = "https://agile9.sharepoint.com/_api/search/query?querytext='doc'";
 
       $http({
         method: 'GET',
